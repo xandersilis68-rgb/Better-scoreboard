@@ -18,12 +18,11 @@
   <div class="center">VolleyBoard Live+</div>
   <div class="right">
     <button id="themeBtn" class="icon-btn" title="Theme">🌓</button>
-    <button id="notifyBtn" class="icon-btn" title="Notifications">🔔</button>
+    <button id="liveBtnTop" class="icon-btn" title="Live">📡</button>
   </div>
 </header>
 
 <main>
-  <!-- HOME -->
   <section id="home" class="screen">
     <h1>🏐 VolleyBoard Live+</h1>
 
@@ -91,24 +90,9 @@
 
     <div class="row two">
       <div class="card">
-        <h3>Live Sharing (Firebase)</h3>
-        <p class="note">Enter your Firebase config in <code>firebase-config.js</code>, then:</p>
-        <div class="two">
-          <button id="liveCreate" class="btn">Go Live (create link)</button>
-          <button id="liveJoin" class="btn">Join as Viewer</button>
-        </div>
-        <div class="two">
-          <input id="roomCode" placeholder="Room code (e.g., ABC123)">
-          <button id="roomLoad" class="btn small">Load</button>
-        </div>
-        <div id="shareWrap" class="share hidden">
-          <div id="shareLink" class="mono"></div>
-          <img id="qrImg" alt="QR" class="qr">
-          <div class="two">
-            <button id="copyLink" class="btn small">Copy Link</button>
-            <button id="shareLinkBtn" class="btn small">Share…</button>
-          </div>
-        </div>
+        <h3>Live Sharing</h3>
+        <p class="note">Add your Firebase config in <code>firebase-config.js</code> (see README). Then click Go Live.</p>
+        <button id="liveOpen" class="btn">📡 Go Live</button>
       </div>
 
       <div class="card">
@@ -119,10 +103,8 @@
     </div>
   </section>
 
-  <!-- VIEW-ONLY overlay -->
   <section id="viewBanner" class="viewBanner hidden">Viewer Mode</section>
 
-  <!-- BOARD -->
   <section id="board" class="screen hidden">
     <canvas id="confetti" class="confetti"></canvas>
     <div class="half" id="leftHalf">
@@ -143,12 +125,9 @@
     <div class="centerBar">
       <div id="setLine">Set 1 / Target 25</div>
       <div id="timerLine" class="hidden">⏱ <span id="timer">20:00</span></div>
-      <div id="wpLine" class="hidden">Win Prob: <span id="wpA">50%</span> – <span id="wpB">50%</span></div>
       <div class="centerBtns">
         <button id="resetBtn" class="btn">Reset</button>
         <button id="statsBtn" class="btn">Stats</button>
-        <button id="voiceBtn" class="btn">🎙️ Voice</button>
-        <button id="voteBtn" class="btn">MVP Vote</button>
       </div>
     </div>
     <div class="half" id="rightHalf">
@@ -168,19 +147,23 @@
     </div>
   </section>
 
-  <!-- MODALS / FINAL / PANELS are same as before -->
-  <section id="modal" class="modal hidden">
-    <div class="modalCard">
-      <h3 id="modalTitle"></h3>
-      <div id="modalBody"></div>
-      <div id="modalActions" class="row two"></div>
+  <section id="fsModal" class="fsModal hidden">
+    <div class="fsWindow">
+      <div class="fsHeader">
+        <h3 id="fsTitle"></h3>
+        <button id="fsClose" class="icon-btn">✖</button>
+      </div>
+      <div id="fsBody" class="fsBody"></div>
     </div>
   </section>
 
-  <section id="final" class="modal hidden">
-    <div class="modalCard">
-      <h3>Match Over!</h3>
-      <div id="finalBody" class="mono"></div>
+  <section id="final" class="fsModal hidden">
+    <div class="fsWindow">
+      <div class="fsHeader">
+        <h3>Match Over!</h3>
+        <button id="finalClose" class="icon-btn">✖</button>
+      </div>
+      <div id="finalBody" class="fsBody mono"></div>
       <div class="row two">
         <button id="dlTxt" class="btn">Download TXT</button>
         <button id="dlCsv" class="btn">Download CSV</button>
@@ -190,37 +173,17 @@
     </div>
   </section>
 
-  <section id="statsPanel" class="sidePanel hidden">
-    <h3>📊 Stats & Commentary</h3>
-    <div id="statsBody" class="mono"></div>
-    <h4>Commentary</h4>
-    <textarea id="commOut" readonly class="mono tall"></textarea>
-    <div class="row two">
-      <button id="commClear" class="btn small">Clear</button>
-      <button id="commDownload" class="btn small">Download Log</button>
+  <section id="historyPanel" class="fsModal hidden">
+    <div class="fsWindow">
+      <div class="fsHeader">
+        <h3>🗂️ Match History</h3>
+        <button id="historyClose" class="icon-btn">✖</button>
+      </div>
+      <div id="historyBody" class="fsBody"></div>
+      <div class="row">
+        <button id="historyClear" class="btn">Clear History</button>
+      </div>
     </div>
-    <button id="statsClose" class="btn">Close</button>
-  </section>
-
-  <section id="historyPanel" class="sidePanel hidden">
-    <h3>🗂️ Match History</h3>
-    <div id="historyBody"></div>
-    <button id="historyClear" class="btn small">Clear History</button>
-    <button id="historyClose" class="btn">Close</button>
-  </section>
-
-  <section id="bracketPanel" class="sidePanel hidden">
-    <h3>🧩 Tournament Bracket</h3>
-    <div class="inline">
-      <label>Size</label>
-      <select id="bracketSize">
-        <option>4</option><option selected>8</option><option>16</option>
-      </select>
-      <button id="bracketNew" class="btn small">New Bracket</button>
-    </div>
-    <div id="bracketBody" class="bracket"></div>
-    <div class="note">Click a match to load teams into the scoreboard.</div>
-    <button id="bracketClose" class="btn">Close</button>
   </section>
 </main>
 

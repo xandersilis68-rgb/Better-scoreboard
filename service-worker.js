@@ -1,4 +1,4 @@
-const CACHE='vb-live-v1';
+const CACHE='vb-fs-v1';
 const ASSETS=[
   './','./index.html','./style.css','./app.js','./firebase-config.js','./manifest.webmanifest',
   './assets/icon-192.png','./assets/icon-512.png','./assets/maskable-512.png'
