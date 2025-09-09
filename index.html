@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>VolleyBoard Live+</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+  <meta name="theme-color" content="#0b0b0f"/>
+</head>
+<body>
+<header class="appbar">
+  <div class="left">
+    <button id="homeBtnTop" class="icon-btn" title="Home">🏠</button>
+    <button id="historyBtnTop" class="icon-btn" title="History">🗂️</button>
+    <button id="bracketBtnTop" class="icon-btn" title="Bracket">🧩</button>
+  </div>
+  <div class="center">VolleyBoard Live+</div>
+  <div class="right">
+    <button id="themeBtn" class="icon-btn" title="Theme">🌓</button>
+    <button id="notifyBtn" class="icon-btn" title="Notifications">🔔</button>
+  </div>
+</header>
+
+<main>
+  <!-- HOME -->
+  <section id="home" class="screen">
+    <h1>🏐 VolleyBoard Live+</h1>
+
+    <div class="row two">
+      <div class="card">
+        <h3>Mode</h3>
+        <div class="chips" id="modeChips">
+          <button class="chip active" data-mode="indoor">Indoor (Best of 5)</button>
+          <button class="chip" data-mode="beach">Beach (Best of 3)</button>
+        </div>
+
+        <div class="chips" id="timedChips" style="margin-top:8px">
+          <button class="chip active" data-timed="false">Untimed</button>
+          <button class="chip" data-timed="true">Timed</button>
+        </div>
+
+        <div id="timeInputWrap" class="inline">
+          <label>Match Duration</label>
+          <input id="matchTime" type="text" value="20:00" placeholder="MM:SS"/>
+        </div>
+
+        <div class="inline">
+          <label>Court</label>
+          <select id="courtSelect"></select>
+          <button id="newCourtBtn">+ Court</button>
+        </div>
+
+        <div class="inline">
+          <button id="coinBtn" class="btn">🎲 Coin Toss</button>
+          <span id="coinResult" class="note"></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Teams</h3>
+        <div class="two">
+          <div>
+            <label>Left Team Name</label>
+            <input id="teamAName" type="text" value="Team A"/>
+            <label class="small">Logo</label>
+            <input id="logoA" type="file" accept="image/*">
+            <div class="swatches" data-for="A"></div>
+          </div>
+          <div>
+            <label>Right Team Name</label>
+            <input id="teamBName" type="text" value="Team B"/>
+            <label class="small">Logo</label>
+            <input id="logoB" type="file" accept="image/*">
+            <div class="swatches" data-for="B"></div>
+          </div>
+        </div>
+        <details style="margin-top:8px">
+          <summary>Indoor Rotations (optional)</summary>
+          <div class="two">
+            <div id="rotA" class="rot">
+              <input placeholder="A1"><input placeholder="A2"><input placeholder="A3"><input placeholder="A4"><input placeholder="A5"><input placeholder="A6">
+            </div>
+            <div id="rotB" class="rot">
+              <input placeholder="B1"><input placeholder="B2"><input placeholder="B3"><input placeholder="B4"><input placeholder="B5"><input placeholder="B6">
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="row two">
+      <div class="card">
+        <h3>Live Sharing (Firebase)</h3>
+        <p class="note">Enter your Firebase config in <code>firebase-config.js</code>, then:</p>
+        <div class="two">
+          <button id="liveCreate" class="btn">Go Live (create link)</button>
+          <button id="liveJoin" class="btn">Join as Viewer</button>
+        </div>
+        <div class="two">
+          <input id="roomCode" placeholder="Room code (e.g., ABC123)">
+          <button id="roomLoad" class="btn small">Load</button>
+        </div>
+        <div id="shareWrap" class="share hidden">
+          <div id="shareLink" class="mono"></div>
+          <img id="qrImg" alt="QR" class="qr">
+          <div class="two">
+            <button id="copyLink" class="btn small">Copy Link</button>
+            <button id="shareLinkBtn" class="btn small">Share…</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Start</h3>
+        <button id="startBtn" class="btn cta">Start Match</button>
+        <div class="note">Use History (🗂️) to see/save past matches.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW-ONLY overlay -->
+  <section id="viewBanner" class="viewBanner hidden">Viewer Mode</section>
+
+  <!-- BOARD -->
+  <section id="board" class="screen hidden">
+    <canvas id="confetti" class="confetti"></canvas>
+    <div class="half" id="leftHalf">
+      <div class="teamHeader">
+        <img id="logoAImg" class="logo" alt="A">
+        <div class="nameLine">
+          <span id="serveA" class="serve hidden">🏐</span>
+          <span id="nameA" class="teamName">Team A</span>
+          <span id="rotationA" class="rotation hidden"></span>
+        </div>
+      </div>
+      <div class="score" id="scoreA">0</div>
+      <div class="bar">
+        <button id="toA" class="btn small">Timeout</button>
+        <span id="toDotsA" class="dots">■ ■</span>
+      </div>
+    </div>
+    <div class="centerBar">
+      <div id="setLine">Set 1 / Target 25</div>
+      <div id="timerLine" class="hidden">⏱ <span id="timer">20:00</span></div>
+      <div id="wpLine" class="hidden">Win Prob: <span id="wpA">50%</span> – <span id="wpB">50%</span></div>
+      <div class="centerBtns">
+        <button id="resetBtn" class="btn">Reset</button>
+        <button id="statsBtn" class="btn">Stats</button>
+        <button id="voiceBtn" class="btn">🎙️ Voice</button>
+        <button id="voteBtn" class="btn">MVP Vote</button>
+      </div>
+    </div>
+    <div class="half" id="rightHalf">
+      <div class="teamHeader">
+        <div class="nameLine">
+          <span id="rotationB" class="rotation hidden"></span>
+          <span id="nameB" class="teamName">Team B</span>
+          <span id="serveB" class="serve hidden">🏐</span>
+        </div>
+        <img id="logoBImg" class="logo" alt="B">
+      </div>
+      <div class="score" id="scoreB">0</div>
+      <div class="bar">
+        <button id="toB" class="btn small">Timeout</button>
+        <span id="toDotsB" class="dots">■ ■</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODALS / FINAL / PANELS are same as before -->
+  <section id="modal" class="modal hidden">
+    <div class="modalCard">
+      <h3 id="modalTitle"></h3>
+      <div id="modalBody"></div>
+      <div id="modalActions" class="row two"></div>
+    </div>
+  </section>
+
+  <section id="final" class="modal hidden">
+    <div class="modalCard">
+      <h3>Match Over!</h3>
+      <div id="finalBody" class="mono"></div>
+      <div class="row two">
+        <button id="dlTxt" class="btn">Download TXT</button>
+        <button id="dlCsv" class="btn">Download CSV</button>
+        <button id="againBtn" class="btn">Play Again</button>
+        <button id="homeEndBtn" class="btn">Home</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="statsPanel" class="sidePanel hidden">
+    <h3>📊 Stats & Commentary</h3>
+    <div id="statsBody" class="mono"></div>
+    <h4>Commentary</h4>
+    <textarea id="commOut" readonly class="mono tall"></textarea>
+    <div class="row two">
+      <button id="commClear" class="btn small">Clear</button>
+      <button id="commDownload" class="btn small">Download Log</button>
+    </div>
+    <button id="statsClose" class="btn">Close</button>
+  </section>
+
+  <section id="historyPanel" class="sidePanel hidden">
+    <h3>🗂️ Match History</h3>
+    <div id="historyBody"></div>
+    <button id="historyClear" class="btn small">Clear History</button>
+    <button id="historyClose" class="btn">Close</button>
+  </section>
+
+  <section id="bracketPanel" class="sidePanel hidden">
+    <h3>🧩 Tournament Bracket</h3>
+    <div class="inline">
+      <label>Size</label>
+      <select id="bracketSize">
+        <option>4</option><option selected>8</option><option>16</option>
+      </select>
+      <button id="bracketNew" class="btn small">New Bracket</button>
+    </div>
+    <div id="bracketBody" class="bracket"></div>
+    <div class="note">Click a match to load teams into the scoreboard.</div>
+    <button id="bracketClose" class="btn">Close</button>
+  </section>
+</main>
+
+<script src="firebase-config.js"></script>
+<script src="app.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js');
+  });
+}
+</script>
+</body>
+</html>
