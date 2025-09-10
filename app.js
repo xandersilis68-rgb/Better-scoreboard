@@ -334,3 +334,32 @@ function fullReset(){ location.reload(); }
 
 // URL viewer auto-join
 (async function boot(){ refreshCourts(); if(new URL(location.href).searchParams.get('view')==='1'){ const code=new URL(location.href).searchParams.get('match'); if(code) joinRoom(code); } })();
+
+
+
+// ===== Modal Helper =====
+function showModal(message, type="info") {
+  let existing = document.getElementById("modalOverlay");
+  if (existing) existing.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = "modalOverlay";
+  overlay.className = "modal-overlay";
+
+  const box = document.createElement("div");
+  box.className = "modal-box " + type;
+
+  const closeBtn = document.createElement("span");
+  closeBtn.className = "modal-close";
+  closeBtn.innerHTML = "&times;";
+  closeBtn.onclick = () => overlay.remove();
+
+  const msg = document.createElement("div");
+  msg.className = "modal-message";
+  msg.innerText = message;
+
+  box.appendChild(closeBtn);
+  box.appendChild(msg);
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+}
